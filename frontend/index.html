@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clario AI Studio</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="app-container">
+
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="logo">
+        <img src="icon.jpg" alt="Clario AI Logo" class="logo-mark-img">
+        <span class="logo-name">Clario AI</span>
+      </div>
+    </div>
+
+    <p class="nav-group-label">Tools</p>
+
+    <nav class="nav-menu">
+      <button class="nav-item active" id="btn-summarize" onclick="showSection('summarize')">
+        <span class="nav-icon">📝</span> Summarizer
+      </button>
+      <button class="nav-item" id="btn-enhancer" onclick="showSection('enhancer')">
+        <span class="nav-icon">✨</span> Enhancer
+      </button>
+      <button class="nav-item" id="btn-emotion" onclick="showSection('emotion')">
+  <span class="nav-icon">🧠</span> Emotion AI
+</button>
+
+      <button class="nav-item" id="btn-similarity" onclick="showSection('similarity')">
+        <span class="nav-icon">⚖️</span> Similarity
+      </button>
+      <button class="nav-item" id="btn-rag" onclick="showSection('rag')">
+        <span class="nav-icon">💬</span> RAG Chat
+      </button>
+       
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="status-dot"></div>
+      <span class="version-text">v2.0.1 · Professional</span>
+    </div>
+  </aside>
+
+  <main class="content-area">
+
+    <section id="summarize" class="view active">
+      <header class="view-header">
+        <h1>Content Summarizer</h1>
+        <p>Upload a file or paste text to generate a structured summary with keyword and entity analysis.</p>
+      </header>
+
+      <div class="two-col">
+        <div class="input-col">
+          <div class="upload-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
+            <input type="file" id="fileInput" accept=".pdf,.docx" hidden>
+            <span class="upload-icon">📂</span>
+            <p class="upload-title">Drop a file or <span>browse</span></p>
+            <p class="upload-meta">PDF · DOCX &nbsp;·&nbsp; Max 10 MB</p>
+            <p id="fileName" class="file-label"></p>
+          </div>
+
+          <div class="action-right">
+            <button class="btn btn-ghost" onclick="uploadFile()">↑ &nbsp;Process file</button>
+          </div>
+
+          <div class="divider">or paste text</div>
+
+          <textarea id="textInput" placeholder="Paste your content here for instant analysis…"></textarea>
+
+          <div class="action-row" style="margin-top:14px;">
+            <div class="select-wrap">
+              <label>Length</label>
+              <select id="mode" onchange="toggleCustomLength()">
+  <option value="short">Concise</option>
+  <option value="standard" selected>Standard</option>
+  <option value="detailed">Comprehensive</option>
+  <option value="custom">Custom</option>
+</select>
+<div id="customLengthWrapper" style="display:none; margin-top:10px;">
+  <label style="font-size:12px; color:var(--text-2);">Custom Word Count</label>
+  <input 
+    type="number" 
+    id="customWordCount" 
+    min="20" 
+    max="500"
+    placeholder="Enter words (e.g. 120)"
+    style="width:100%; margin-top:5px;"
+  >
+</div>
+            </div>
+            <button class="btn btn-primary" onclick="summarize()">Analyze →</button>
+          </div>
+        </div>
+
+        <div class="results-col">
+          <div class="loader-wrap" id="summaryLoader">
+            <div class="spinner"></div>
+            <p>Analyzing document…</p>
+          </div>
+
+          <div class="surface" id="summaryCard">
+            <div class="card-header">
+              <div class="card-dot"></div>
+              <h3>Executive Summary</h3>
+            </div>
+            <div class="card-body empty" id="summary">
+              Your summary will appear here after analysis.
+            </div>
+          </div>
+
+          <div class="surface" id="analysisCard">
+            <div class="card-header">
+              <div class="card-dot" style="background:#6ea8fe; opacity:.5;"></div>
+              <h3>Document Intelligence</h3>
+            </div>
+            <div class="card-body empty" id="analysis">
+              Keywords, entities, sentiment, emotion, and subjectivity insights will appear here.
+            </div>
+          </div>
+          
+          <div class="action-right" id="downloadWrapper" style="display: none; margin-top: 10px;">
+            <button id="btnDownload" class="btn btn-ghost btn-lg" onclick="downloadReport()" style="width: 100%; justify-content: center;">
+              📄 &nbsp;Download PDF Report
+            </button>
+          </div>
+
+          <div class="surface" id="historyCard" style="margin-top: 10px;">
+            <div class="card-header">
+              <div class="card-dot" style="background:#a78bfa; opacity:.5;"></div>
+              <h3>Recent Analyses</h3>
+            </div>
+            <div class="card-body" id="historyList">
+                <p class="placeholder-text" style="color:var(--text-3); font-size:13px;">No recent analyses.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="enhancer" class="view">
+      <header class="view-header">
+        <h1>AI Writing Enhancer</h1>
+        <p>Improve clarity, tone, and style instantly with advanced AI.</p>
+      </header>
+
+      <div class="two-col">
+        <div class="input-col">
+          <span class="compare-label">Draft Text</span>
+          <textarea id="enhanceInput" placeholder="Paste text to enhance here..." style="min-height: 250px;"></textarea>
+          
+          <div class="action-row" style="margin-top:14px;">
+            <div class="select-wrap">
+              <label>Style Mode</label>
+              <select id="enhanceMode">
+                <option value="improve" selected>Improve Clarity</option>
+                <option value="academic">Academic Tone</option>
+                <option value="professional">Professional Tone</option>
+                <option value="simplify">Simplify</option>
+                <option value="paraphrase">Paraphrase</option>
+              </select>
+            </div>
+            <button id="btnRunEnhancer" class="btn btn-primary" onclick="runEnhancer()">Enhance ✨</button>
+          </div>
+        </div>
+
+        <div class="results-col">
+          <div class="surface" style="height: 100%; display: flex; flex-direction: column;">
+            <div class="card-header">
+              <div class="card-dot" style="background:#f59e0b; opacity:.5;"></div>
+              <h3>Enhanced Output</h3>
+            </div>
+            <div class="card-body empty" id="enhanceOutput" style="flex: 1; min-height: 250px;">
+              Your enhanced text will appear here.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="similarity" class="view">
+      <header class="view-header">
+        <h1>Semantic Similarity</h1>
+        <p>Compare two texts to understand how contextually related they are using semantic embeddings.</p>
+      </header>
+
+      <div class="compare-grid">
+        <div>
+          <span class="compare-label">Document A</span>
+          <textarea id="text1" class="compare-box" placeholder="Paste primary source text…"></textarea>
+        </div>
+        <div>
+          <span class="compare-label">Document B</span>
+          <textarea id="text2" class="compare-box" placeholder="Paste target text to compare…"></textarea>
+        </div>
+      </div>
+
+      <div class="center-row">
+        <button class="btn btn-primary btn-lg" onclick="checkSimilarity()">Run Comparison →</button>
+      </div>
+
+      <div class="score-card">
+        <div class="score-top">
+          <span class="score-sublabel">Semantic Correlation</span>
+          <span id="similarityResult">—</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="similarityBar"></div>
+        </div>
+        <div class="score-ticks">
+          <span>0%</span><span>25%</span><span>50%</span><span>75%</span><span>100%</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="rag" class="view">
+      <header class="view-header">
+        <h1>Contextual AI Chat</h1>
+        <p>Index a knowledge base and ask questions about its content in natural language.</p>
+      </header>
+
+      <div class="rag-grid">
+        <div class="rag-sidebar-panel">
+          <span class="compare-label">Knowledge Base</span>
+          <textarea id="ragDocument" placeholder="Paste document content to index…"></textarea>
+          <button class="btn btn-ghost btn-full" onclick="buildRAG()">⚡ &nbsp;Index Knowledge</button>
+          <div class="rag-status" id="ragStatus"></div>
+        </div>
+
+        <div class="chat-surface">
+          <div class="chat-topbar">
+            <div class="chat-topbar-dot"></div>
+            <h3>Live Session</h3>
+          </div>
+
+          <div class="chat-msgs" id="chatBox">
+            <div class="msg bot">Hello! Index a document to start asking questions about its content.</div>
+          </div>
+
+          <div class="chat-input-row">
+            <input type="text" id="userQuestion" placeholder="Ask a question about the document…"
+                   onkeydown="if(event.key==='Enter') askQuestion()">
+            <button class="btn btn-primary" onclick="askQuestion()">Send</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+<section id="emotion" class="view">
+  <header class="view-header">
+    <h1>Emotion Intelligence Studio</h1>
+    <p>Analyze emotional tone and subjectivity from raw text or uploaded documents.</p>
+  </header>
+
+  <div class="two-col">
+
+    <div class="input-col">
+
+      <div class="upload-zone" onclick="document.getElementById('emotionFile').click()">
+        <input type="file" id="emotionFile" accept=".pdf,.docx" hidden>
+        <span class="upload-icon">📂</span>
+        <p class="upload-title">Upload document for emotion analysis</p>
+        <p class="upload-meta">PDF · DOCX</p>
+        <p id="emotionFileName" class="file-label"></p>
+      </div>
+
+      <div class="action-right">
+        <button class="btn btn-ghost" onclick="analyzeEmotionFile()">Analyze Document</button>
+      </div>
+
+      <div class="divider">or paste text</div>
+
+      <textarea id="emotionInput" placeholder="Paste text for emotion analysis..."></textarea>
+
+      <div class="action-row" style="margin-top:14px;">
+        <button class="btn btn-primary" onclick="analyzeEmotionText()">Analyze Emotion →</button>
+      </div>
+
+    </div>
+
+    <div class="results-col">
+
+      <div class="surface">
+        <div class="card-header">
+          <div class="card-dot"></div>
+          <h3>Emotion Dashboard</h3>
+        </div>
+        <div class="card-body empty" id="emotionDashboard">
+          Emotion results will appear here.
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+  </main>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

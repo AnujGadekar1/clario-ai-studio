@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome | Clario AI</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    body { overflow: hidden; }
+
+    .welcome-root {
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg-app);
+    }
+
+    .welcome-card {
+      width: 100%;
+      max-width: 420px;
+      padding: 48px 40px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-soft);
+      border-radius: 24px;
+      text-align: center;
+      animation: fadeUp .3s ease both;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    }
+
+    @keyframes fadeUp {
+      from { opacity:0; transform: translateY(16px); }
+      to   { opacity:1; transform: translateY(0); }
+    }
+
+    /* Updated to match zoomed logo style */
+    .wc-logo-container {
+      width: 72px;
+      height: 72px;
+      margin: 0 auto 24px;
+      border-radius: 18px;
+      overflow: hidden; /* Clips the image to the radius */
+      border: 1px solid var(--border-soft);
+      box-shadow: 0 0 20px var(--accent-dim);
+    }
+
+    .wc-logo-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover; /* Zooms to fit perfectly */
+      object-position: center;
+      display: block;
+    }
+
+    .wc-title {
+      font-size: 24px;
+      font-weight: 600;
+      letter-spacing: -.02em;
+      color: var(--text-1);
+      margin-bottom: 10px;
+    }
+
+    .wc-desc {
+      font-size: 14px;
+      color: var(--text-2);
+      line-height: 1.65;
+      margin-bottom: 32px;
+    }
+
+    .wc-features {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 32px;
+    }
+
+    .wc-pill {
+      background: var(--bg-hover);
+      border: 1px solid var(--border-soft);
+      border-radius: 99px;
+      padding: 6px 14px;
+      font-size: 12px;
+      color: var(--text-2);
+      font-weight: 500;
+    }
+
+    .wc-btn {
+      width: 100%;
+      padding: 14px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: var(--r-lg);
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 150ms ease, transform 80ms ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .wc-btn:hover { background: var(--accent-h); }
+    .wc-btn:active { transform: scale(.98); }
+
+    .wc-footer {
+      margin-top: 24px;
+      font-size: 11px;
+      color: var(--text-3);
+      letter-spacing: 0.02em;
+    }
+  </style>
+</head>
+<body>
+
+<div class="welcome-root">
+  <div class="welcome-card">
+    <div class="wc-logo-container">
+      <img src="icon.jpg" alt="Clario AI" class="wc-logo-img">
+    </div>
+
+    <h1 class="wc-title">Clario AI Studio</h1>
+    <p class="wc-desc">
+      Enterprise document intelligence — summarization, semantic similarity,
+      and retrieval-augmented generation in one clean interface.
+    </p>
+
+    <div class="wc-features">
+      <span class="wc-pill">📝 Summarizer</span>
+      <span class="wc-pill">⚖️ Similarity</span>
+      <span class="wc-pill">💬 RAG Chat</span>
+      <span class="wc-pill">✨ Enhancer</span>
+    </div>
+
+    <button class="wc-btn" onclick="enter()">
+      Get started <span>→</span>
+    </button>
+
+    <p class="wc-footer">v2.0.1 Professional &nbsp;·&nbsp; Powered by Advanced NLP</p>
+  </div>
+</div>
+
+<script>
+function enter() {
+  const card = document.querySelector('.welcome-card');
+  card.style.transition = 'opacity .25s ease, transform .25s ease';
+  card.style.opacity = '0';
+  card.style.transform = 'translateY(-10px) scale(.98)';
+  setTimeout(() => { window.location.href = 'index.html'; }, 240);
+}
+</script>
+
+</body>
+</html>
